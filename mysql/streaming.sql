@@ -34,28 +34,31 @@ INSERT INTO streaming (id,name,plataforma,usuariosl,precio,genero) VALUES
 
 -- consultas
 
+-- visualizar todos los registros
+SELECT * FROM streaming;
+-- agregar nueva columna llamada fecha de inicio
  ALTER TABLE streaming ADD inicio_S date;
- 
- SELECT AVG(precio) FROM streaming;
- 
+ -- promedio de todos los servicios de streaming disponibles
+SELECT AVG(precio) FROM streaming;
+ -- vizualizar todos los servicios de streaming con el precio mas alto
 SELECT * FROM streaming WHERE precio = (SELECT MAX(precio) FROM streaming);
-
-update streaming set inicio_S = "2023-05-02" ;
-
+-- acturalizacion de datos para todos los registros que se encuentran en null
+UPDATE streaming set inicio_S = "2023-05-02" ;
+-- nombre plataforma para los servicios que cuesten menos de 5.990
 SELECT name, plataforma, precio FROM streaming WHERE precio <= 5990;
+-- buscar todos los registros que contengan el caracter o
+SELECT * FROM streaming WHERE genero like '%o%' ;
+-- borrar registros con la id 1,2,4,6,19
+DELETE FROM streaming WHERE id in (1,2,4,6,19);
 
-SELECT * from streaming where genero like '%o%' ;
 
-delete from streaming where id in (1,2,4,6,19);
-
+-- agregamos el tipo de plataforma para realizar las proximas consultas
 ALTER TABLE streaming ADD T_plataforma text;
+UPDATE streaming set T_plataforma ="all";
+UPDATE streaming set T_plataforma = "smartphone" WHERE precio =5290;
 
-update streaming set T_plataforma ="all";
 
-update streaming set T_plataforma = "smartphone" WHERE precio =5290;
-
-SELECT * FROM streaming WHERE precio = (SELECT MAX(precio) FROM streaming);
-
-delete from streaming where T_plataforma = "smartphone";
-
-select * from streaming;
+-- borrar registros que su plataforma sea smartphone
+DELETE FROM streaming WHERE T_plataforma = "smartphone";
+-- obtener el promedio de los precios de todos los servicios de streaming disponibles
+SELECT AVG(precio) FROM streaming;
