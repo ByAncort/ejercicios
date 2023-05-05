@@ -1,6 +1,4 @@
-var opc=1;
-var f_pago="";
-  
+ 
 const zap1 = {type:"nike", model:"air force 1", color:"white", precio:109000};
 const zap2 = {type:"nike", model:"air max plus", color:"black and white", precio:194990};
 const zap3 = {type:"nike", model:"Go FlyEase", color:"black", precio:139990};
