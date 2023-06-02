@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ejemplo de prompt en JavaScript</title>
+  </head>
+  <body>
+
+    <script>
+      // Solicitar al usuario el producto del que quiere conocer el precio
+      const producto = prompt('¿De qué producto te gustaría conocer el precio? (hamburguesa, pizza, sushi, completos)');
+      
+      // Definir precios de los productos
+      const precios = {
+        'hamburguesa': 7500,
+        'pizza': 5000,
+        'sushi': 15000,
+        'completos': 2000,
+      };
+      
+      // Mostrar precio correspondiente
+      switch (producto) {
+        case 'hamburguesa':
+          alert(`El precio de la hamburguesa es: ${precios.hamburguesa} clp`);
+          break;
+        case 'pizza':
+          alert(`El precio de la pizza es: ${precios.pizza} clp`);
+          break;
+        case 'sushi':
+          alert(`El precio del sushi es: ${precios.sushi} clp`);
+          break;
+        case 'completos':
+          alert(`El precio del completo es: ${precios.completos} clp`);
+          break;
+        default:
+          alert('El producto ingresado no existe en nuestro menú');
+      }
+    </script>
+  </body>
+</html>
