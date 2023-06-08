@@ -210,37 +210,60 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+System.exit(0);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 String name;
-name = txtname.getText(); // Suponiendo que txtname es un JTextField u otro componente similar
-String message = "Hola " + name + "\nEl o los tipos de juego que le gusta son: ";
+name = txtname.getText(); // Assuming txtname is a JTextField or a similar component
+String message = "Hola " + name + "\nEl o los tipos de juego que te gustan son: ";
 String checkBoxMessage = "";
 
 if (opc1.isSelected()) {
-    checkBoxMessage += " shooter ";
+    checkBoxMessage += "shooter ";
 }
 
 if (opc2.isSelected()) {
-    checkBoxMessage += " indie ";
+    checkBoxMessage += "indie ";
 }
 
 if (opc3.isSelected()) {
-    checkBoxMessage += " aventura ";
-}if (opc4.isSelected()) {
-    checkBoxMessage += " estrategia ";
+    checkBoxMessage += "aventura ";
 }
 
-JOptionPane.showMessageDialog(null, message + checkBoxMessage);
+if (opc4.isSelected()) {
+    checkBoxMessage += "estrategia ";
+}
 
-JOptionPane.showMessageDialog(null, message + checkBoxMessage);
+String curso;
+curso = "";
+String messagec = "Te encuentras cursando: ";
+String checkBoxCurso = "";
+
+if (opc5.isSelected()) {
+    checkBoxCurso += "1° medio ";
+}
+
+if (opc6.isSelected()) {
+    checkBoxCurso += "2° medio ";
+}
+
+if (opc7.isSelected()) {
+    checkBoxCurso += "3° medio ";
+}
+
+if (opc8.isSelected()) {
+    checkBoxCurso += "4° medio ";
+}
+String cadicionales = jTextField1.getText();
+String opinion = "tu opinion es : ";
+JOptionPane.showMessageDialog(null, message + checkBoxMessage + "\n" + messagec + checkBoxCurso+ "\n" + opinion+ cadicionales);
+JOptionPane.showMessageDialog(null,"gracias eso fue todo");
+
     }//GEN-LAST:event_jButton1ActionPerformed
-String checkBoxcurso = "";
-    if (opc5.isSelected()) {
-    checkBoxcurso += " 1°Medio ";
-}
+    
+
+
     /**
      * @param args the command line arguments
      */
