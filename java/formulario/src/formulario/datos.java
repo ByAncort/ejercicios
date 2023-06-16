@@ -9,6 +9,6 @@ package formulario;
  *
  * @author 3__d
  */
-class opc {
+class datos {
     
 }
