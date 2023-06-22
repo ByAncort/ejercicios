@@ -28,17 +28,20 @@ public class NewJFrame extends javax.swing.JFrame {
         initComponents();
         
     }
-    void mostrardatos(String valor) {
+ void mostrardatos(String valor) {
+     //Se crea una instancia de la clase conectar utilizando el constructor predeterminado:
     conectar cc = new conectar();
+    //Se obtiene una conexión a la base de datos llamando al método conexion() de la instancia cc
     Connection cn = cc.conexion();
+    //Se crea un objeto DefaultTableModel para almacenar los datos de la tabla:
     DefaultTableModel modelo = new DefaultTableModel();
-    
+    //Se agregan columnas al modelo de la tabla con los nombres "Id", "Nombre", "Curso" y "Categoria":
     modelo.addColumn("Id");
     modelo.addColumn("Nombre");
     modelo.addColumn("Curso");
     modelo.addColumn("Categoria");
     
-   // jTable1.setModel(modelo);
+    // jTable1.setModel(modelo);
     
     String sql = "";
     if (valor.equals("")) {
@@ -48,9 +51,11 @@ public class NewJFrame extends javax.swing.JFrame {
     }
     
     try {
+        //Se crea una instancia de Statement a partir de la conexión cn para ejecutar la consulta SQL en la base de datos:
         Statement st = cn.createStatement();
+        //Se ejecuta la consulta utilizando executeQuery(sql) y se obtiene un objeto ResultSet que contendrá los resultados:
         ResultSet rs = st.executeQuery(sql);
-        
+        //Se recorre el ResultSet con un bucle while para obtener los datos de cada fila y agregarlos al modelo de la tabla
         while (rs.next()) {
             String[] datos = new String[4];
             datos[0] = rs.getString(1);
@@ -63,13 +68,14 @@ public class NewJFrame extends javax.swing.JFrame {
         
         //jTable1.setModel(modelo);
         
-        // Cerrar el ResultSet y Statement
+        // Cerrar el ResultSet y el Statement
         rs.close();
         st.close();
     } catch (SQLException ex) {
         Logger.getLogger(datos.class.getName()).log(Level.SEVERE, null, ex);
     }
 }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -80,6 +86,7 @@ public class NewJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jToggleButton1 = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -97,8 +104,13 @@ public class NewJFrame extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+
+        jToggleButton1.setText("jToggleButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 0, 255));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel1.setText("id");
 
@@ -134,6 +146,13 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel3.setText("En que curso te encuentras");
 
         jLabel4.setText("que tipo de juegos te gustan");
+
+        jButton2.setText("salir");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -183,9 +202,11 @@ public class NewJFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(78, 78, 78)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(63, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -218,7 +239,9 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
@@ -259,6 +282,7 @@ if (jCheckBox5.isSelected()) {
 try {
     // Preparar la declaración SQL con marcadores de posición para los valores
     PreparedStatement pst = cn.prepareStatement("INSERT INTO usuario2(id, nombre, curso, message, comentario) VALUES (?, ?, ?, ?, ?)");
+    
     // Establecer los valores para los marcadores de posición
     pst.setString(1, jTextField1.getText()); // id
     pst.setString(2, jTextField2.getText()); // nombre
@@ -279,6 +303,10 @@ try {
 }
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        System.exit(0); // Cierra la aplicación
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -317,6 +345,7 @@ try {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
@@ -333,6 +362,7 @@ try {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 
    
