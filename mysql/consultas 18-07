@@ -1,0 +1,47 @@
+CREATE TABLE juegadores (
+    id INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    edad INT,
+    nick VARCHAR(50),
+    juego VARCHAR(50),
+    pais VARCHAR(50),
+    bebidafav VARCHAR(50)
+);
+INSERT INTO juegadores (id, nombre, edad, nick, juego, pais, bebidafav) VALUES
+(1, 'Juan', 25, 'juani', 'underterra', 'Chile', 'vodka'),
+(2, 'Ana', 18, 'ana87', 'minecraft', 'Argentina', 'vino'),
+(3, 'Pedro', 30, 'pedro2022', 'fortnite', 'Perú', 'vodka'),
+(4, 'María', 22, 'mary_gamer', 'league_of_legends', 'España', 'cola'),
+(5, 'Carlos', 19, 'carlitos09', 'counter_strike', 'México', 'vodka');
+
+
+
+-- Seleccionar todos los jugadores cuyo país comience con 'P':
+SELECT * FROM juegadores WHERE pais LIKE 'P%';
+
+-- Seleccionar el nombre y el país de los jugadores que sean de Chile:
+SELECT nombre, pais FROM juegadores WHERE pais = 'chile';
+
+-- Seleccionar todos los jugadores que jueguen 'underterra':
+SELECT * FROM juegadores WHERE juego = 'underterra';
+
+-- Seleccionar el nick y el país de los jugadores cuya bebida favorita comience con 'v':
+SELECT nick, pais FROM juegadores WHERE bebidafav LIKE 'v%';
+
+-- Seleccionar el id, nick y juego de los jugadores cuya bebida favorita comience con 'V' o sean de Chile:
+SELECT id, nick, juego FROM juegadores WHERE bebidafav LIKE 'V%' OR pais = 'chile';
+
+-- Seleccionar la edad, nombre, juego y bebida favorita de los jugadores cuyo nick termine con '0' o el país esté entre 5 y 11:
+SELECT edad, nombre, juego, bebidafav FROM juegadores WHERE nick LIKE '%0' OR pais BETWEEN 5 AND 11;
+
+-- Seleccionar el nombre y el juego de los jugadores cuyo nick contiene la letra 'a', el país contiene la letra 'e' y la edad está entre 17 y 22:
+SELECT nombre, juego FROM juegadores WHERE nick LIKE '%a%' AND pais LIKE '%e%' AND edad BETWEEN 17 AND 22;
+
+-- Calcular el promedio de la edad de todos los jugadores:
+SELECT AVG(edad) FROM juegadores;
+
+-- Contar la cantidad de jugadores cuya bebida favorita es 'cola':
+SELECT COUNT(*) AS personas FROM juegadores WHERE bebidafav = 'cola';
+
+-- Eliminar todos los jugadores cuyo país sea "china":
+DELETE FROM juegadores WHERE pais = 'china';
