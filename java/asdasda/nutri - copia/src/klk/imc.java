@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package klk;
 
 import java.sql.Connection;
@@ -12,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -25,8 +20,10 @@ public class imc extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
+       private String user;
+    private String pass;
     
-    public imc() {
+    public imc(String user,String pass) {
         initComponents();
         jComboBox1.addItem("volumen");
         jComboBox1.addItem("definicion");
@@ -270,7 +267,7 @@ public class imc extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new imc().setVisible(true);
+//                new imc(user,pass).setVisible(true);
             }
         });
     }

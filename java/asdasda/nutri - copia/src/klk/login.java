@@ -119,17 +119,16 @@ public class login extends javax.swing.JFrame {
 conectar cc = new conectar();
 // Establecer una conexión con la base de datos
 Connection cn = cc.conexion();
+ // Obtener el usuario y la contraseña ingresados
+   String user = jTextField1.getText();
+    String pass = jPasswordField1.getText();
 
 try {
-    // Obtener el usuario y la contraseña ingresados
-    String usuario = jTextField1.getText();
-    String contrasena = jPasswordField1.getText();
-
     // Consulta SQL para verificar si el usuario y la contraseña existen en la tabla "registro"
     String consulta = "SELECT * FROM user WHERE user = ? AND pass = ?";
     PreparedStatement pst = cn.prepareStatement(consulta);
-    pst.setString(1, usuario);
-    pst.setString(2, contrasena);
+    pst.setString(1, user);
+    pst.setString(2, pass);
 
     // Ejecutar la consulta
     ResultSet resultado = pst.executeQuery();
@@ -142,7 +141,7 @@ try {
         JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
         
         // Por ejemplo, puedes abrir una nueva ventana o redirigir a otra página, etc.
-        imc GN = new imc();
+        imc GN = new imc(user,pass);
         GN.setVisible(true);
     } else {
         // Si no se encontró un registro con los datos proporcionados, muestra un mensaje de error.
