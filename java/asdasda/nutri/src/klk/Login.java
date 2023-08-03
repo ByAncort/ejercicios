@@ -119,12 +119,20 @@ public class Login extends javax.swing.JFrame {
 Conectar cc = new Conectar();
 // Establecer una conexión con la base de datos
 Connection cn = cc.conexion();
+<<<<<<< HEAD:java/asdasda/nutri/src/klk/Login.java
   // Obtener el usuario y la contraseña ingresados
     String user = jTextField1.getText();
     String pass = jPasswordField1.getText();
 
 try {
   
+=======
+ // Obtener el usuario y la contraseña ingresados
+   String user = jTextField1.getText();
+    String pass = jPasswordField1.getText();
+
+try {
+>>>>>>> 1bb22fff4ce8539bd506e26dac17feef505cd6bc:java/asdasda/nutri - copia/src/klk/login.java
     // Consulta SQL para verificar si el usuario y la contraseña existen en la tabla "registro"
     String consulta = "SELECT * FROM user WHERE user = ? AND pass = ?";
     PreparedStatement pst = cn.prepareStatement(consulta);
@@ -142,7 +150,11 @@ try {
         JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
         
         // Por ejemplo, puedes abrir una nueva ventana o redirigir a otra página, etc.
+<<<<<<< HEAD:java/asdasda/nutri/src/klk/Login.java
         Home GN = new Home(user,pass);
+=======
+        imc GN = new imc(user,pass);
+>>>>>>> 1bb22fff4ce8539bd506e26dac17feef505cd6bc:java/asdasda/nutri - copia/src/klk/login.java
         GN.setVisible(true);
     } else {
         // Si no se encontró un registro con los datos proporcionados, muestra un mensaje de error.
