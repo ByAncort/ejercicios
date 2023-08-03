@@ -14,12 +14,12 @@ import javax.swing.JOptionPane;
  *
  * @author 3__d
  */
-public class register extends javax.swing.JFrame {
+public class Register extends javax.swing.JFrame {
 
     /**
      * Creates new form register
      */
-    public register() {
+    public Register() {
         initComponents();
     }
 
@@ -88,17 +88,19 @@ public class register extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addGap(18, 18, 18)
@@ -106,12 +108,7 @@ public class register extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(25, 25, 25)
-                                .addComponent(jLabel8)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(80, 80, 80)
                         .addComponent(jButton1)
@@ -158,35 +155,38 @@ public class register extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-         conectar cc = new conectar();
+        Conectar cc = new Conectar();
 // Establecer una conexión con la base de datos
-Connection cn = cc.conexion();
+        Connection cn = cc.conexion();
+        int rowsAffected = 0;
+        String user = jTextField4.getText();
+        String pass = jTextField6.getText();
         try {
-    // Preparar la declaración SQL con marcadores de posición para los valores
-    PreparedStatement pst = cn.prepareStatement("INSERT INTO user( fname, lname, user ,email , pass) VALUES (?, ?, ?, ?, ?)");
-    
-    // Establecer los valores para los marcadores de posición
-    pst.setString(1, jTextField1.getText()); // firt name 
-    pst.setString(2, jTextField3.getText()); // last name
-    pst.setString(3, jTextField4.getText()); // user name
-    pst.setString(4, jTextField5.getText()); // email
-    pst.setString(5, jTextField6.getText()); // password
-   
+            // Preparar la declaración SQL con marcadores de posición para los valores
+            PreparedStatement pst = cn.prepareStatement("INSERT INTO user(fname, lname, user ,email , pass) VALUES (?, ?, ?, ?, ?)");
 
-    // Ejecutar la declaración SQL y obtener el número de filas afectadas
-    int rowsAffected = pst.executeUpdate();
-    if (rowsAffected > 0) {
-         imc GN = new imc();
-        GN.setVisible(true);
-       
-    } else {
-        JOptionPane.showMessageDialog(null, "Error al agregar");
-    }
-} catch (SQLException e) {
-    e.printStackTrace();
-}
+            // Establecer los valores para los marcadores de posición
+            pst.setString(1, jTextField1.getText()); // firt name 
+            pst.setString(2, jTextField3.getText()); // last name
+            pst.setString(3, jTextField4.getText()); // user name
+            pst.setString(4, jTextField5.getText()); // email
+            pst.setString(5, jTextField6.getText()); // password
 
-        
+            // Ejecutar la declaración SQL y obtener el número de filas afectadas
+            rowsAffected = pst.executeUpdate();
+            if (rowsAffected > 0) {
+                   JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
+                Home GN = new Home(user, pass);
+                GN.setVisible(true);
+                
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al agregar");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -206,20 +206,21 @@ Connection cn = cc.conexion();
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new register().setVisible(true);
+                new Register().setVisible(true);
             }
         });
     }

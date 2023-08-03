@@ -13,12 +13,12 @@ import java.sql.SQLException;
  *
  * @author 3__d
  */
-public class login extends javax.swing.JFrame {
+public class Login extends javax.swing.JFrame {
 
     /**
      * Creates new form NewJFrame
      */
-    public login() {
+    public Login() {
         initComponents();
     }
 
@@ -116,20 +116,20 @@ public class login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        // Crear una instancia de conexión
-conectar cc = new conectar();
+Conectar cc = new Conectar();
 // Establecer una conexión con la base de datos
 Connection cn = cc.conexion();
+  // Obtener el usuario y la contraseña ingresados
+    String user = jTextField1.getText();
+    String pass = jPasswordField1.getText();
 
 try {
-    // Obtener el usuario y la contraseña ingresados
-    String usuario = jTextField1.getText();
-    String contrasena = jPasswordField1.getText();
-
+  
     // Consulta SQL para verificar si el usuario y la contraseña existen en la tabla "registro"
     String consulta = "SELECT * FROM user WHERE user = ? AND pass = ?";
     PreparedStatement pst = cn.prepareStatement(consulta);
-    pst.setString(1, usuario);
-    pst.setString(2, contrasena);
+    pst.setString(1, user);
+    pst.setString(2, pass);
 
     // Ejecutar la consulta
     ResultSet resultado = pst.executeQuery();
@@ -142,7 +142,7 @@ try {
         JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
         
         // Por ejemplo, puedes abrir una nueva ventana o redirigir a otra página, etc.
-        imc GN = new imc();
+        Home GN = new Home(user,pass);
         GN.setVisible(true);
     } else {
         // Si no se encontró un registro con los datos proporcionados, muestra un mensaje de error.
@@ -159,7 +159,7 @@ try {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
        // Por ejemplo, puedes abrir una nueva ventana o redirigir a otra página, etc.
-        register GN = new register();
+        Register GN = new Register();
         GN.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -180,14 +180,18 @@ try {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -196,7 +200,7 @@ try {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new login().setVisible(true);
+                new Login().setVisible(true);
             }
         });
     }

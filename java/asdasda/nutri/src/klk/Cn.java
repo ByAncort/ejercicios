@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
  *
  * @author 3__d
  */
-class cn {
+class Cn {
 
     static PreparedStatement prepareStatement(String consulta) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
