@@ -250,37 +250,52 @@ public class Home extends javax.swing.JFrame {
         Conectar cc = new Conectar();
         // Establecer una conexión con la base de datos
         Connection cn = cc.conexion();
+        String objetivo = jComboBox2.getSelectedItem().toString();
+        String Ccomidas = jComboBox3.getSelectedItem().toString();
         String sexo = jComboBox1.getSelectedItem().toString();
-        String alturaInput = jTextField3.getText();
-        String pesoInput = jTextField4.getText();
+        String alturaStr = jTextField3.getText();
+        String pesoStr = jTextField4.getText();
 
-        // !"".equals(alturaInput) -> alturaInput no sea igual a "", es lo mismo que alturaInput != ""
-        if (alturaInput != null && !"".equals(alturaInput)
-                && pesoInput != null && !"".equals(pesoInput)
+// Verificar si los campos no están vacíos
+        if (alturaStr != null && !"".equals(alturaStr)
+                && pesoStr != null && !"".equals(pesoStr)
                 && userInput != null && !"".equals(userInput)
                 && passInput != null && !"".equals(passInput)) {
+
             try {
+                // Convertir las cadenas de texto a double
+                double alturaEnMetros = Double.parseDouble(alturaStr);
+                double pesoEnKg = Double.parseDouble(pesoStr);
+
+                // Calcular el IMC
+                double imc = pesoEnKg / (alturaEnMetros * alturaEnMetros)*10000;
+
                 // Preparar la declaración SQL con marcadores de posición para los valores
-                PreparedStatement pst = cn.prepareStatement("UPDATE user SET sexo = ?, altura = ?, peso = ? WHERE user = ? and pass = ?");
+                PreparedStatement pst = cn.prepareStatement("UPDATE user SET sexo = ?, altura = ?, peso = ?, imc = ?, objetivo =?, Ccomidas =? WHERE user = ? and pass = ?");
 
                 // Establecer los valores para los marcadores de posición
                 pst.setString(1, sexo);
-                pst.setString(2, alturaInput);
-                pst.setString(3, pesoInput);
-                pst.setString(4, userInput);
-                pst.setString(5, passInput);
+                pst.setDouble(2, alturaEnMetros);
+                pst.setDouble(3, pesoEnKg);
+                pst.setDouble(4, imc);
+                pst.setString(5, objetivo);
+                pst.setString(6, Ccomidas);
+                pst.setString(7, userInput);
+                pst.setString(8, passInput);
 
                 // Ejecutar la declaración SQL y obtener el número de filas afectadas
                 int rowsAffected = pst.executeUpdate();
                 if (rowsAffected > 0) {
                     // La actualización se realizó correctamente
-                    JOptionPane.showMessageDialog(null, "Actualización exitosa");
+                    JOptionPane.showMessageDialog(null, "Actualización exitosa.\nTu Índice de Masa Corporal (IMC) es: " + imc);
                 } else {
                     // No se encontró el registro o no se realizó la actualización
                     JOptionPane.showMessageDialog(null, "Error al actualizar el registro");
                 }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Error en los datos de altura o peso. Asegúrate de ingresar valores numéricos válidos.");
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Ocurrio un error al actualizar registro.");
+                JOptionPane.showMessageDialog(null, "Ocurrió un error al actualizar registro.");
                 System.out.println(e.getMessage());
             }
         } else {
