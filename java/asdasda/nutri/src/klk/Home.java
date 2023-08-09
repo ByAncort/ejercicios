@@ -9,10 +9,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
 
 /**
  *
@@ -69,7 +71,7 @@ public class Home extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jtalimentos = new javax.swing.JTable();
         jComboBox3 = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jComboBox4 = new javax.swing.JComboBox<>();
@@ -127,18 +129,33 @@ public class Home extends javax.swing.JFrame {
 
         jLabel6.setText("Si previamente has completado el formulario no necesitas hacerlo de nuevo a menos que quieras actualizar los datos");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jtalimentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "title 5", "Title 6"
+                "id", "nombre", "calorias", "proteina", "carbohidatos", "grasas", "tipo"
             }
-        ));
-        jScrollPane2.setViewportView(jTable2);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(jtalimentos);
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 comida", "2 comida", "3 comida", "4 comida", "5 comida", "6 comida" }));
 
@@ -301,102 +318,47 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      // TODO add your handling code here:
-    String objetivo = null;
-   
-
-    Connection conexion = null;
-    PreparedStatement statement = null;
-    ResultSet resultado = null;
-
-    try {
-        // Paso 2: Establecer la conexión con la base de datos
-        String url = "jdbc:mysql://localhost:3306/nutricionista";
-        conexion = DriverManager.getConnection(url, "root", "");
-
-        // Paso 3: Crear una sentencia SQL y ejecutarla utilizando una sentencia preparada
-        String consulta = "SELECT objetivo FROM user WHERE user=? AND pass=?";
-        statement = conexion.prepareStatement(consulta);
-        statement.setString(1, user);
-        statement.setString(2, pass);
-        resultado = statement.executeQuery();
-
-        // Paso 4: Procesar el resultado (solo si hay un resultado)
-        if (resultado.next()) {
-            objetivo = resultado.getString("objetivo");
-        } else {
-            // Aquí puedes manejar el caso donde no se encuentra el usuario
-            // Por ejemplo, mostrar un mensaje de error
-            System.out.println("Usuario no encontrado.");
-            return;
-        }
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-    } finally {
-        // Paso 5: Cerrar la conexión y los recursos (se debe hacer después de usarlos)
-        try {
-            if (resultado != null) {
-                resultado.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (conexion != null) {
-                conexion.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Aquí tienes el valor de la variable "objetivo" obtenido de la base de datos
-    System.out.println("Objetivo: " + objetivo);
-
-    // Obtener el modelo de la tabla donde mostrar los resultados
-    DefaultTableModel modelo = (DefaultTableModel) jTable2.getModel();
-    modelo.setRowCount(0); // Limpiar la tabla antes de llenarla con nuevos datos
-
-    String sql = "SELECT * FROM alimentos where objetivo='" + objetivo + "'";
-    try {
-        // Crear una instancia de conexión
-        Conectar cc = new Conectar();
-        // Establecer una conexión con la base de datos
-        Connection cn = cc.conexion();
-
-        // Crear un arreglo para almacenar los datos de cada alimento
-        Object[] alimentos = new Object[6]; // Cambiar el tamaño del arreglo según el número de columnas en la tabla
-
-        // Crear una sentencia SQL y ejecutarla
-        Statement statement2 = cn.createStatement();
-        ResultSet resultado2 = statement2.executeQuery(sql);
-
-        // Procesar los resultados y llenar la tabla con los datos
-        while (resultado2.next()) {
-            // Obtener los datos de cada columna y almacenarlos en el arreglo "alimentos"
-            alimentos[0] = resultado2.getInt("id");
-            alimentos[1] = resultado2.getString("nombre");
-            alimentos[2] = resultado2.getDouble("calorias");
-            alimentos[3] = resultado2.getDouble("proteina");
-            alimentos[4] = resultado2.getDouble("carbohidratos");
-            alimentos[5] = resultado2.getDouble("grasas");
-
-            // Agregar una nueva fila en la tabla con los datos del alimento actual
-            modelo.addRow(alimentos);
-        }
-
-        // Cerrar los recursos (resultado, statement y conexión)
-        resultado2.close();
-        statement2.close();
-        cn.close();
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
+      
+ MostrarDatos mostrarDatos = new MostrarDatos();
+        mostrarDatos.cargarDatosEnTabla(jtalimentos);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     
-    
+ public class MostrarDatos {
+
+    public void cargarDatosEnTabla(JTable tabla) {
+        try {
+            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+            Connection con = new Conectar().conexion(); // Asumiendo que esta línea es correcta
+
+            String sql = "SELECT id, nombre, calorias, proteina, carbohidratos, grasas, tipo FROM alimentos";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Object[] fila = new Object[7]; // Hay 7 columnas en tu base de datos
+
+                fila[0] = rs.getInt("id");
+                fila[1] = rs.getString("nombre");
+                fila[2] = rs.getDouble("calorias");
+                fila[3] = rs.getDouble("proteina");
+                fila[4] = rs.getDouble("carbohidratos");
+                fila[5] = rs.getDouble("grasas");
+                fila[6] = rs.getString("tipo");
+
+                modelo.addRow(fila);
+            }
+
+            // Cerrar recursos (ResultSet, PreparedStatement y Connection) en un bloque finally
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
+
     
     
     public class CalcularCalorias {
@@ -647,10 +609,10 @@ double calObjetivo=0;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JTable jtalimentos;
     // End of variables declaration//GEN-END:variables
 
     private static class datos {
