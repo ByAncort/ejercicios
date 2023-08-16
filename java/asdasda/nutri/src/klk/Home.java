@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -31,13 +30,77 @@ public class Home extends javax.swing.JFrame {
 
     //metodo constructor
     public Home(String user, String pass) {
+        
         initComponents();
+        this.setLocationRelativeTo(null);
         jComboBox1.addItem("hombre");
         jComboBox1.addItem("mujer");
         this.user = user;
         this.pass = pass;
+       try {
+            Connection con = new Conectar().conexion();
+            String sql = "SELECT * FROM user WHERE user = ? AND pass = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, user);
+            ps.setString(2, pass);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Obtener los datos del usuario desde el ResultSet
+                double pesoUsuario = rs.getDouble("peso");
+                double alturaUsuario = rs.getDouble("altura");
+                String actividadUsuario = rs.getString("actividad");
+                String objetivoUsuario = rs.getString("objetivo");
+
+                // Calcular el IMC
+                double imc = pesoUsuario / (alturaUsuario * alturaUsuario) * 10000;
+
+                // Calcular las calorías según las necesidades
+                double calorias = calcularCalorias(actividadUsuario, objetivoUsuario, pesoUsuario);
+
+                // Mostrar el IMC y las calorías en los JLabels
+                jLabel9.setText("Su IMC es: " + imc);
+                jLabel10.setText("Calorías necesarias: " + calorias);
+            } else {
+                jLabel9.setText("Usuario no encontrado");
+                jLabel10.setText("");
+            }
+
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+   
+        
+    }
+    
+private double calcularCalorias(String actividad, String objetivo, double peso) {
+    double caloriasBase = 0.0;
+
+    if (actividad.equalsIgnoreCase("sedentario")) {
+        caloriasBase = peso * 22;
+    } else if (actividad.equalsIgnoreCase("activo")) {
+        caloriasBase = peso * 25;
+    } else if (actividad.equalsIgnoreCase("muy activo")) {
+        caloriasBase = peso * 30;
     }
 
+    if (objetivo.equalsIgnoreCase("volumen")) {
+        caloriasBase += 400;
+    } else if (objetivo.equalsIgnoreCase("definicion")) {
+        caloriasBase -= 400;
+    }
+
+    return caloriasBase;
+}
+
+
+    
+    
+    
+    
     Home() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -66,17 +129,17 @@ public class Home extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
         jSeparator3 = new javax.swing.JSeparator();
-        jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtalimentos = new javax.swing.JTable();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
         jComboBox4 = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         jToggleButton1.setText("jToggleButton1");
 
@@ -96,6 +159,7 @@ public class Home extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 0, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setType(java.awt.Window.Type.POPUP);
 
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,28 +187,21 @@ public class Home extends javax.swing.JFrame {
 
         jLabel4.setText("Peso(kg)");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "volumen ", "definicion", "mantenimiento" }));
-
-        jLabel5.setText("Objetivo");
-
         jLabel6.setText("Si previamente has completado el formulario no necesitas hacerlo de nuevo a menos que quieras actualizar los datos");
 
         jtalimentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "id", "nombre", "calorias", "proteina", "carbohidatos", "grasas", "tipo"
+                "nombre", "calorias", "proteina", "carbohidatos", "grasas", "tipo", "clasificacion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                true, false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -157,18 +214,28 @@ public class Home extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jtalimentos);
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 comida", "2 comida", "3 comida", "4 comida", "5 comida", "6 comida" }));
-
-        jLabel7.setText("Cantidad de comidas");
-
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "sedentario", "activo", "muy activo" }));
 
         jLabel8.setText("Nivel de actividad");
 
-        jButton1.setText("jButton1");
+        jButton1.setText("volumen");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("definicion");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("matenimieto");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
             }
         });
 
@@ -176,15 +243,16 @@ public class Home extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(95, 95, 95)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
                                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -198,41 +266,40 @@ public class Home extends javax.swing.JFrame {
                                         .addComponent(jLabel2)
                                         .addGap(66, 66, 66)
                                         .addComponent(jLabel4)))
-                                .addGap(31, 31, 31)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5))
                                 .addGap(27, 27, 27)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7))
-                                .addGap(6, 6, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel8)
                                     .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(70, 70, 70)
-                                .addComponent(jLabel1)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(84, 84, 84)))
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(95, 95, 95)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(334, 334, 334)))
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                        .addGap(72, 72, 72)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(237, 237, 237)
+                        .addComponent(jLabel1))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(130, 130, 130)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(111, 111, 111)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(116, 116, 116)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 727, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(77, 77, 77))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(354, 354, 354))))
+                .addContainerGap(76, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 929, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -243,41 +310,39 @@ public class Home extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(48, 48, 48))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(jLabel3)
+                                            .addGap(48, 48, 48))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                 .addComponent(jLabel2)
-                                                .addComponent(jLabel4)
-                                                .addComponent(jLabel5))
-                                            .addGap(18, 18, 18)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jLabel7)
-                                                .addComponent(jLabel8))
+                                                .addComponent(jLabel4))
                                             .addGap(18, 18, 18)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jLabel8))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(43, 43, 43))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(69, 69, 69)))
+                        .addGap(84, 84, 84)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 0, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(11, 11, 11)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE))
                 .addGap(38, 38, 38))
         );
 
@@ -318,10 +383,104 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      
- MostrarDatos mostrarDatos = new MostrarDatos();
-        mostrarDatos.cargarDatosEnTabla(jtalimentos);
+          try {
+               DefaultTableModel modelo = (DefaultTableModel) jtalimentos.getModel();
+        modelo.setRowCount(0); // Limpia los datos existentes en la tabla
+        Connection con = new Conectar().conexion(); // Asumiendo que esta línea es correcta
+
+        String sql = "SELECT nombre, calorias, proteina, carbohidratos, grasas, tipo, clasificacion FROM alimentos where tipo = 'volumen' ";
+        PreparedStatement ps = con.prepareStatement(sql); 
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Object[] fila = new Object[7]; // Hay 7 columnas en tu base de datos
+
+            fila[0] = rs.getString("nombre");
+            fila[1] = rs.getDouble("calorias");
+            fila[2] = rs.getDouble("proteina");
+            fila[3] = rs.getDouble("carbohidratos");
+            fila[4] = rs.getDouble("grasas");
+            fila[5] = rs.getString("tipo");
+            fila[6] = rs.getString("clasificacion");
+
+            modelo.addRow(fila);
+        }
+
+        // Cerrar recursos
+        rs.close();
+        ps.close();
+        con.close();
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+            try {
+               DefaultTableModel modelo = (DefaultTableModel) jtalimentos.getModel();
+        modelo.setRowCount(0); // Limpia los datos existentes en la tabla
+        Connection con = new Conectar().conexion(); // Asumiendo que esta línea es correcta
+
+        String sql = "SELECT nombre, calorias, proteina, carbohidratos, grasas, tipo, clasificacion FROM alimentos where tipo = 'definicion' ";
+        PreparedStatement ps = con.prepareStatement(sql); 
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Object[] fila = new Object[7]; // Hay 7 columnas en tu base de datos
+
+            fila[0] = rs.getString("nombre");
+            fila[1] = rs.getDouble("calorias");
+            fila[2] = rs.getDouble("proteina");
+            fila[3] = rs.getDouble("carbohidratos");
+            fila[4] = rs.getDouble("grasas");
+            fila[5] = rs.getString("tipo");
+            fila[6] = rs.getString("clasificacion");
+
+            modelo.addRow(fila);
+        }
+
+        // Cerrar recursos
+        rs.close();
+        ps.close();
+        con.close();
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+           try {
+               DefaultTableModel modelo = (DefaultTableModel) jtalimentos.getModel();
+        modelo.setRowCount(0); // Limpia los datos existentes en la tabla
+        Connection con = new Conectar().conexion(); // Asumiendo que esta línea es correcta
+
+        String sql = "SELECT nombre, calorias, proteina, carbohidratos, grasas, tipo, clasificacion FROM alimentos where tipo = 'mantenimiento' ";
+        PreparedStatement ps = con.prepareStatement(sql); 
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Object[] fila = new Object[7]; // Hay 7 columnas en tu base de datos
+
+            fila[0] = rs.getString("nombre");
+            fila[1] = rs.getDouble("calorias");
+            fila[2] = rs.getDouble("proteina");
+            fila[3] = rs.getDouble("carbohidratos");
+            fila[4] = rs.getDouble("grasas");
+            fila[5] = rs.getString("tipo");
+            fila[6] = rs.getString("clasificacion");
+
+            modelo.addRow(fila);
+        }
+
+        // Cerrar recursos
+        rs.close();
+        ps.close();
+        con.close();
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     
  public class MostrarDatos {
@@ -331,20 +490,20 @@ public class Home extends javax.swing.JFrame {
             DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
             Connection con = new Conectar().conexion(); // Asumiendo que esta línea es correcta
 
-            String sql = "SELECT id, nombre, calorias, proteina, carbohidratos, grasas, tipo FROM alimentos";
-            PreparedStatement ps = con.prepareStatement(sql);
+            String sql = "SELECT nombre, calorias, proteina, carbohidratos, grasas, tipo, clasificacion FROM alimentos where tipo = 'volumen' ";
+            PreparedStatement ps = con.prepareStatement(sql); 
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Object[] fila = new Object[7]; // Hay 7 columnas en tu base de datos
 
-                fila[0] = rs.getInt("id");
-                fila[1] = rs.getString("nombre");
-                fila[2] = rs.getDouble("calorias");
-                fila[3] = rs.getDouble("proteina");
-                fila[4] = rs.getDouble("carbohidratos");
-                fila[5] = rs.getDouble("grasas");
-                fila[6] = rs.getString("tipo");
+                fila[0] = rs.getString("nombre");
+                fila[1] = rs.getDouble("calorias");
+                fila[2] = rs.getDouble("proteina");
+                fila[3] = rs.getDouble("carbohidratos");
+                fila[4] = rs.getDouble("grasas");
+                fila[5] = rs.getString("tipo");
+                fila[6] = rs.getString("clasificacion");
 
                 modelo.addRow(fila);
             }
@@ -487,8 +646,7 @@ double calObjetivo=0;
         Conectar cc = new Conectar();
         // Establecer una conexión con la base de datos
         Connection cn = cc.conexion();
-        String objetivo = jComboBox2.getSelectedItem().toString();
-        String Ccomidas = jComboBox3.getSelectedItem().toString();
+      
         String actividad = jComboBox4.getSelectedItem().toString();
         String sexo = jComboBox1.getSelectedItem().toString();
         String alturaStr = jTextField3.getText();
@@ -509,18 +667,16 @@ double calObjetivo=0;
                 double imc = pesoEnKg / (alturaEnMetros * alturaEnMetros) * 10000;
 
                 // Preparar la declaración SQL con marcadores de posición para los valores
-                PreparedStatement pst = cn.prepareStatement("UPDATE user SET sexo = ?, altura = ?, peso = ?, imc = ?, objetivo =?, Ccomidas =?, actividad =? WHERE user = ? and pass = ?");
+                PreparedStatement pst = cn.prepareStatement("UPDATE user SET sexo = ?, altura = ?, peso = ?, imc = ?, actividad =? WHERE user = ? and pass = ?");
 
                 // Establecer los valores para los marcadores de posición
                 pst.setString(1, sexo);
                 pst.setDouble(2, alturaEnMetros);
                 pst.setDouble(3, pesoEnKg);
                 pst.setDouble(4, imc);
-                pst.setString(5, objetivo);
-                pst.setString(6, Ccomidas);
-                pst.setString(7, actividad);
-                pst.setString(8, userInput);
-                pst.setString(9, passInput);
+                pst.setString(5, actividad);
+                pst.setString(6, userInput);
+                pst.setString(7, passInput);
 
                 // Ejecutar la declaración SQL y obtener el número de filas afectadas
                 int rowsAffected = pst.executeUpdate();
@@ -591,18 +747,18 @@ double calObjetivo=0;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
