@@ -34,26 +34,37 @@ public class Login extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jPasswordField1 = new javax.swing.JPasswordField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(240, 101, 146));
+        setBackground(new java.awt.Color(255, 255, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setPreferredSize(new java.awt.Dimension(443, 382));
         setType(java.awt.Window.Type.POPUP);
 
-        jButton1.setText("login");
+        jButton1.setBackground(new java.awt.Color(0, 153, 204));
+        jButton1.setText("Login Now");
+        jButton1.setBorder(null);
+        jButton1.setBorderPainted(false);
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("login");
+        jTextField1.setToolTipText("");
+        jTextField1.setName(""); // NOI18N
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Yu Gothic UI Light", 2, 14)); // NOI18N
         jLabel2.setText("user:");
@@ -61,9 +72,11 @@ public class Login extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Yu Gothic UI Light", 2, 14)); // NOI18N
         jLabel3.setText("contraseña:");
 
-        jButton2.setForeground(new java.awt.Color(255, 51, 51));
-        jButton2.setText("registrar");
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(0, 102, 204));
+        jButton2.setText("signup now");
         jButton2.setAutoscrolls(true);
+        jButton2.setBorder(null);
         jButton2.setContentAreaFilled(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -72,111 +85,119 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel1.setText("Login");
+
+        jLabel4.setText("Dont't have on account?");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPasswordField1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 129, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(206, 206, 206)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(228, 228, 228))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(108, 108, 108)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(61, 61, 61)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(8, 8, 8)
+                                    .addComponent(jLabel4)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jButton2))
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel3)
+                                .addComponent(jTextField1)
+                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(115, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
                 .addComponent(jLabel1)
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
+
+        jTextField1.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       // Crear una instancia de conexión
-Conectar cc = new Conectar();
-// Establecer una conexión con la base de datos
-Connection cn = cc.conexion();
-
-  // Obtener el usuario y la contraseña ingresados
-    String user = jTextField1.getText();
-    String pass = jPasswordField1.getText();
-
-  
-
-try {
-
-    // Consulta SQL para verificar si el usuario y la contraseña existen en la tabla "registro"
-    String consulta = "SELECT * FROM user WHERE user = ? AND pass = ?";
-    PreparedStatement pst = cn.prepareStatement(consulta);
-    pst.setString(1, user);
-    pst.setString(2, pass);
-
-    // Ejecutar la consulta
-    ResultSet resultado = pst.executeQuery();
-
-    // Comprobar si se encontró un registro con el usuario y contraseña proporcionados
-    if (resultado.next()) {
-        // Si el resultado.next() devuelve true, significa que se encontró un registro
-        // con el usuario y contraseña ingresados. Aquí puedes realizar las acciones
-        // correspondientes para tratar al usuario autenticado correctamente.
-        JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
-        
-        // Por ejemplo, puedes abrir una nueva ventana o redirigir a otra página, etc.
-
-        Home GN = new Home(user,pass);
-
- 
-        GN.setVisible(true);
-    } else {
-        // Si no se encontró un registro con los datos proporcionados, muestra un mensaje de error.
-        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
-    }
-
-} catch (SQLException e) {
-    // Manejo de excepciones en caso de error de base de datos
-    e.printStackTrace();
-}
-
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-       // Por ejemplo, puedes abrir una nueva ventana o redirigir a otra página, etc.
+        // Por ejemplo, puedes abrir una nueva ventana o redirigir a otra página, etc.
         Register GN = new Register();
         GN.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Crear una instancia de conexión
+        Conectar cc = new Conectar();
+        // Establecer una conexión con la base de datos
+        Connection cn = cc.conexion();
+
+        // Obtener el usuario y la contraseña ingresados
+        String user = jTextField1.getText();
+        String pass = jPasswordField1.getText();
+
+        try {
+
+            // Consulta SQL para verificar si el usuario y la contraseña existen en la tabla "registro"
+            String consulta = "SELECT * FROM user WHERE user = ? AND pass = ?";
+            PreparedStatement pst = cn.prepareStatement(consulta);
+            pst.setString(1, user);
+            pst.setString(2, pass);
+
+            // Ejecutar la consulta
+            ResultSet resultado = pst.executeQuery();
+
+            // Comprobar si se encontró un registro con el usuario y contraseña proporcionados
+            if (resultado.next()) {
+                // Si el resultado.next() devuelve true, significa que se encontró un registro
+                // con el usuario y contraseña ingresados. Aquí puedes realizar las acciones
+                // correspondientes para tratar al usuario autenticado correctamente.
+                JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
+
+                // Por ejemplo, puedes abrir una nueva ventana o redirigir a otra página, etc.
+
+                Home GN = new Home(user,pass);
+
+                GN.setVisible(true);
+            } else {
+                // Si no se encontró un registro con los datos proporcionados, muestra un mensaje de error.
+                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+            }
+
+        } catch (SQLException e) {
+            // Manejo de excepciones en caso de error de base de datos
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -226,6 +247,7 @@ try {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
